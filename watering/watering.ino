@@ -13,19 +13,20 @@
 
 #define WATERING_HOUR1 6
 
-#define THRESHOLD_MOISTURE1 250 
-#define THRESHOLD_MOISTURE2 250 
-#define THRESHOLD_MOISTURE3 250 
+#define THRESHOLD_MOISTURE1 280 
+#define THRESHOLD_MOISTURE2 285
+#define THRESHOLD_MOISTURE3 300
+#define THRESHOLD_MOISTURE_MAX 800  
 
 #include "DHT.h"
 #define DHTPIN            2         // Pin which is connected to the DHT sensor.
 #define DHTTYPE           DHT22     // DHT 22 (AM2302)
 DHT dht(DHTPIN, DHTTYPE);
 
-int time_pump1=15;
-int time_pump2=12;
-int time_pump3=10;
-int time_pump4=0;
+int time_pump1=12;
+int time_pump2=13;
+int time_pump3=12;
+int time_pump4=12;
 
 int moisture1;
 int moisture2;
@@ -97,7 +98,7 @@ void loop() {
   if (startup==1 || (current_time.hour()==WATERING_HOUR1 && current_time.minute()<2)) {
     startup=0;
 
-    if (moisture1>THRESHOLD_MOISTURE1 && time_pump1>0) {
+    if (moisture1>THRESHOLD_MOISTURE1 && moisture1<THRESHOLD_MOISTURE_MAX && time_pump1>0) {
       Serial.println("watering1");
       time_watering_pump1=time_pump1;
       digitalWrite(PUMP1, LOW);
@@ -105,7 +106,7 @@ void loop() {
       digitalWrite(PUMP1, HIGH);
     }
 
-    if (moisture2>THRESHOLD_MOISTURE2 && time_pump2>0) {
+    if (moisture2>THRESHOLD_MOISTURE2 && moisture2<THRESHOLD_MOISTURE_MAX && time_pump2>0) {
       Serial.println("watering2");
       time_watering_pump2=time_pump2;
       digitalWrite(PUMP2, LOW);
@@ -113,7 +114,7 @@ void loop() {
       digitalWrite(PUMP2, HIGH);
     }
 
-    if (moisture3>THRESHOLD_MOISTURE3  && time_pump3>0) {
+    if (moisture3>THRESHOLD_MOISTURE3  && moisture3<THRESHOLD_MOISTURE_MAX && time_pump3>0) {
       Serial.println("watering3");
       time_watering_pump3=time_pump3;
       digitalWrite(PUMP3, LOW);
@@ -121,7 +122,7 @@ void loop() {
       digitalWrite(PUMP3, HIGH);
     }  
 
-    if (time_pump4>0) {
+    if (moisture3>THRESHOLD_MOISTURE3  && moisture3<THRESHOLD_MOISTURE_MAX && time_pump4>0) {
       Serial.println("watering4");
       time_watering_pump4=time_pump4;
       digitalWrite(PUMP4, LOW);
